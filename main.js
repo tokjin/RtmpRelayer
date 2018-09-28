@@ -25,7 +25,7 @@ ipcMain.on('relaunch', (event, arg) => {
 })
 
 //console.log(app.getPath('userData'));
-
+console.log(__dirname);
 var nms;
 
 
@@ -194,8 +194,10 @@ app.on('activate', () => {
 
 
 
-function serverStart(task){
-    
+function serverStart(task){ 
+    if (process.platform !== 'darwin') var fileName = 'ffmpeg.exe';
+    else var fileName = 'ffmpeg';
+
     var config = {
         rtmp: {
             port: 1935,
@@ -205,7 +207,7 @@ function serverStart(task){
             ping_timeout: 30
         },
         relay: {
-            ffmpeg: __dirname+'/ffmpeg/ffmpeg',
+            ffmpeg: __dirname+'/ffmpeg/'+fileName,
             tasks: task
         }
     };
