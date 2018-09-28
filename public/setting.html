@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/photon.css?100">
+	<link rel="stylesheet" href="css/main.css?100">
+	<script>
+		window.$ = window.jQuery = require('jquery');
+	</script>
+</head>
+<body>
+	<div class="window">
+		<!-- .toolbar-header sits at the top of your app -->
+		<header class="toolbar toolbar-header">
+			<h1 class="title">Miami</h1>
+		</header>
+
+
+
+		<!-- Your app's content goes inside .window-content -->
+		<div class="window-content">
+			<div class="pane-group">
+				<div class="main-border">
+
+
+					<table>
+						<tr>
+							<td style="width: 66px;">
+
+								<span>RTMP Server Port:</span>
+							</td>
+							<td style="width: 100%;">
+
+								<input id="port" type="number" value="1935" placeholder="Default: 1935" style="width: 100%;">
+
+							</td>
+						</tr>
+
+						<tr>
+                            <td>
+								<input type="checkbox" id="directEdit" value="1"> Direct Edit Mode
+
+							</td>
+						</tr>
+
+					</table>
+
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	<footer class="toolbar toolbar-footer">
+		<div class="toolbar-actions">
+
+			<div class="pull-right startStopBtn">
+				<button id="saveBtn" class="btn btn-primary" style="width: 120px">
+      Save & ReLaunch
+    </button>
+			</div>
+		</div>
+	</footer>
+
+	<script src="js/setting.js?100"></script>
+</body>
+</html>
