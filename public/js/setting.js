@@ -1,6 +1,12 @@
 const {ipcRenderer} = require('electron');
 const storage = require('electron-json-storage');
 
+ipcRenderer.send('getPlatform');
+
+ipcRenderer.on('receivePlatform', (event, arg) => {
+    if(arg != 'darwin') $('header').remove();
+});
+
 let task = [];
 
 storage.get('config.json', function (error, data) {

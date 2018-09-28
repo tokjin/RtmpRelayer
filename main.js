@@ -9,11 +9,14 @@ const reportUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdn0O0E6c_ykV0kkguqi
 
 ipcMain.on('serverStart', (event, arg) => {
     serverStart(arg);
-//    event.sender.send('asynchronous-reply', 'pong')
 })
 
 ipcMain.on('serverStop', (event, arg) => {
     nms.stop();
+})
+
+ipcMain.on('getPlatform', (event, arg) => {
+    event.sender.send('receivePlatform', process.platform);
 })
 
 ipcMain.on('relaunch', (event, arg) => {
@@ -34,7 +37,7 @@ function createWindow() {
     
 	mainWindow = new BrowserWindow({
 		width: 500,
-		height: 300,
+		height: 350,
 		titleBarStyle: 'hidden',
 		acceptFirstMouse: true,
         show: false,
@@ -83,58 +86,97 @@ function settingWindow() {
 }
 
 function initMenu(){
-    const template = [{
-		label: 'ファイル',
-		submenu: [{
-                label: 'このソフトについて',
-                selector: "orderFrontStandardAboutPanel:"
-			},{
-				type: 'separator'
-			},{
-                label: '設定',
-                click: settingWindow
-			},{
-				type: 'separator'
-			},{
-                label: '終了',
-                accelerator: "CmdOrCtrl+Q",
-                click: onExit
-			}
-		]
-	}, {
-     label: "編集",
-     submenu: [
-         { label: "取り消し", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-         { label: "やり直し", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-         { type: "separator" },
-         { label: "カット", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-         { label: "コピー", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-         { label: "ペースト", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-         { label: "全て選択", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-     ]},
-	{
-        label: 'ヘルプ',
-		role: 'help',
-		submenu: [{
-                label: '問題の報告...',
-                click() {
-                    electron.shell.openExternal(reportUrl);
+    if(process.platform == 'darwin') {
+        var template = [{
+            label: 'ファイル',
+            submenu: [{
+                    label: 'このソフトについて',
+                    selector: "orderFrontStandardAboutPanel:"
+                },{
+                    type: 'separator'
+                },{
+                    label: '設定',
+                    click: settingWindow
+                },{
+                    type: 'separator'
+                },{
+                    label: '終了',
+                    accelerator: "CmdOrCtrl+Q",
+                    click: onExit
                 }
-            },{
-            type: 'separator'
-            },{
-                label: 'とかい育ち のホームページ',
-                click() {
-                    electron.shell.openExternal('https://tokaisodachi.com')
+            ]
+        }, {
+         label: "編集",
+         submenu: [
+             { label: "取り消し", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+             { label: "やり直し", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+             { type: "separator" },
+             { label: "カット", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+             { label: "コピー", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+             { label: "ペースト", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+             { label: "全て選択", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+         ]},{
+            label: 'ヘルプ',
+            role: 'help',
+            submenu: [{
+                    label: '問題の報告...',
+                    click() {
+                        electron.shell.openExternal(reportUrl);
+                    }
+                },{
+                type: 'separator'
+                },{
+                    label: 'とかい育ち のホームページ',
+                    click() {
+                        electron.shell.openExternal('https://tokaisodachi.com')
+                    }
+                },{
+                    label: 'Twitterで とかい育ち をフォロー',
+                    click() {
+                        electron.shell.openExternal('https://twitter.com/jintokai')
+                    }
+                }]
+            }
+        ]
+    } else {
+        var template = [{
+            label: 'ファイル',
+            submenu: [{
+                    label: '設定',
+                    click: settingWindow
+                },{
+                    type: 'separator'
+                },{
+                    label: '終了',
+                    accelerator: "CmdOrCtrl+Q",
+                    click: onExit
                 }
-            },{
-                label: 'Twitterで とかい育ち をフォロー',
-                click() {
-                    electron.shell.openExternal('https://twitter.com/jintokai')
-                }
-            }]
-        }
-    ]
+            ]
+        },{
+            label: 'ヘルプ',
+            role: 'help',
+            submenu: [{
+                    label: '問題の報告...',
+                    click() {
+                        electron.shell.openExternal(reportUrl);
+                    }
+                },{
+                type: 'separator'
+                },{
+                    label: 'とかい育ち のホームページ',
+                    click() {
+                        electron.shell.openExternal('https://tokaisodachi.com')
+                    }
+                },{
+                    label: 'Twitterで とかい育ち をフォロー',
+                    click() {
+                        electron.shell.openExternal('https://twitter.com/jintokai')
+                    }
+                }]
+            }
+        ]
+
+    }
 
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
@@ -149,7 +191,6 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     if (mainWindow === null) createWindow();
 });
-
 
 
 

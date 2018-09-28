@@ -3,11 +3,11 @@
 const {ipcRenderer} = require('electron');
 const storage = require('electron-json-storage');
 
-// ToDo
-// 設定画面作成 portとdirectEdit 初期状態に戻す
-// directEditモード
-// パッケージング
-// licenseまわり
+ipcRenderer.send('getPlatform');
+
+ipcRenderer.on('receivePlatform', (event, arg) => {
+    if(arg != 'darwin') $('header').remove();
+});
 
 storage.get('config.json', function (error, data) {
     if (error) throw error;
@@ -17,7 +17,6 @@ storage.get('config.json', function (error, data) {
         
         $('.tab-group').html('');
         $('.pane-group').html('<textarea id="directEditer">'+JSON.stringify(data.task)+'</textarea>');
-        
         
     } else {
         // データがあるときの処理
@@ -67,8 +66,6 @@ storage.get('config.json', function (error, data) {
 });
 
 
-
-
 tabEvent();
 btnEvent();
 
@@ -107,7 +104,6 @@ function tabEvent() {
         
         btnEvent();
     });
-
 }
 
 function buttonSelect(id){
@@ -180,11 +176,3 @@ function configInit() {
     });
 
 }
-
-/*
-
-[{"app":"live1","mode":"push","edge":"rtmp://jp.pscp.tv:80/x/q2vm9shrsi9a","name":"tokaisodachi"},{"app":"live1","mode":"push","edge":"rtmp://jp.pscp.tv:80/x/hj1wrxw4k267","name":"tokaisodachi"}]
-
-*/
-
-
