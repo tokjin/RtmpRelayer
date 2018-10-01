@@ -1,5 +1,4 @@
 // レンダラープロセス
-
 const {ipcRenderer} = require('electron');
 const storage = require('electron-json-storage');
 
@@ -8,6 +7,12 @@ ipcRenderer.send('getPlatform');
 ipcRenderer.on('receivePlatform', (event, arg) => {
     if(arg != 'darwin') $('header').remove();
 });
+
+ipcRenderer.on('console', (event, arg) => {
+    logAppend(arg);
+});
+
+var currentPort = 1935;
 
 storage.get('config.json', function (error, data) {
     if (error) throw error;
@@ -22,8 +27,10 @@ storage.get('config.json', function (error, data) {
         // データがあるときの処理
         console.log(data);
         
-        if(data.port != 1935) {
-            for(var i=0;i<5;i++) {
+        if(data.port != currentPort) {
+            currentPort = data.port;
+            
+            for(var i=0;i<2;i++) {
                 let text = $('input#streamUrl').eq(i).val();   $('input#streamUrl').eq(i).val(text.replace('localhost','localhost:'+data.port));
             }
         }
@@ -55,16 +62,12 @@ storage.get('config.json', function (error, data) {
                         
                     } else {
                         $('#addStream0'+i+' #pushStream').eq(j-1).val(cnt['live'+i][j-1]);
-                    }
-                    
+                    }           
                 }
             }
-            
         }
-        
     }
 });
-
 
 tabEvent();
 btnEvent();
@@ -151,7 +154,7 @@ function serverStart() {
     }
     
     var json = {
-        port: 1935,
+        port: currentPort,
         directEdit: false,
         task: task
     };
@@ -160,11 +163,10 @@ function serverStart() {
         if (error) throw error;
     });
     
-    ipcRenderer.send('serverStart', task);
+    ipcRenderer.send('serverStart', task, json.port);
 }
 
 function configInit() {
-    
     var json = {
         port: 1935,
         directEdit: false,
@@ -174,5 +176,9 @@ function configInit() {
     storage.set('config.json', json, function (error) {
         if (error) throw error;
     });
+}
 
+function logAppend(text){
+    console.log(text);
+    $('#logTextArea').append(text+'\n');
 }
