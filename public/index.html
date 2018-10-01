@@ -11,32 +11,26 @@
 </head>
 <body>
 	<div class="window">
-		<!-- .toolbar-header sits at the top of your app -->
 		<header class="toolbar toolbar-header">
 			<h1 class="title">RtmpRelayer</h1>
 		</header>
 
-
-
 		<div class="tab-group">
-
 			<div class="tab-item active" id="tab1">
 				<span id="tabAppName">live1</span>
 			</div>
-
+            
 			<div class="tab-item" id="tab2">
 				<span id="tabAppName">live2</span>
 			</div>
 
-
+			<div class="tab-item" id="log">
+				<span id="tabAppName">log</span>
+			</div>
 		</div>
 
-
-		<!-- Your app's content goes inside .window-content -->
 		<div class="window-content">
 			<div class="pane-group">
-
-
 				<div class="main-border tab1html" app-name="live1">
 					<table>
 						<tr>
@@ -79,8 +73,6 @@
 					<br>
 					<br>
 				</div>
-
-
 				<div class="main-border tab2html" app-name="live2" style="display: none;">
 					<table>
 						<tr>
@@ -123,152 +115,10 @@
 					<br>
 					<br>
 				</div>
-
-
-				<div class="main-border tab3html" app-name="live3" style="display: none;">
-					<table>
-						<tr>
-							<td style="width: 66px;">
-								<span>Stream URL</span>
-							</td>
-							<td style="width: 100%;">
-								<input id="streamUrl" type="text" value="rtmp://localhost/live3/" placeholder="" style="width: 100%;">
-							</td>
-							<td>
-								<button id="addUrl" class="btn btn-default" style="width: 64px; height: 22px;">Add URL</button>
-							</td>
-						</tr>
-						<tr>
-							<td><span>Stream Key</span>
-							</td>
-							<td colspan=2 style="width: 90%;">
-								<input type="text" id="streamKey" value="tokaisodachi" placeholder="" style="width: 100%;">
-							</td>
-
-						</tr>
-					</table>
-					<hr>
-					<table>
-						<tr>
-							<td style="width: 66px;">
-								<img src="assets/arrow.svg" style="width: 32px">
-							</td>
-							<td id="addStream03">
-								<input id="pushStream" type="text" value="" placeholder="Stream URL / Key" style="width: 100%;">
-							</td>
-						</tr>
-						<tr>
-							<td>
-							</td>
-							<td>
-								<button id="addStream03btn" class="btn btn-default  pull-right" style="width: 64px; height: 22px;">Add</button>
-							</td>
-						</tr>
-					</table>
-					<span id="addArea"></span>
-					<br>
-					<br>
-					<br>
-				</div>
-
-
-				<div class="main-border tab4html" app-name="live4" style="display: none;">
-					<table>
-						<tr>
-							<td style="width: 66px;">
-								<span>Stream URL</span>
-							</td>
-							<td style="width: 100%;">
-								<input id="streamUrl" type="text" value="rtmp://localhost/live4/" placeholder="" style="width: 100%;">
-							</td>
-							<td>
-								<button id="addUrl" class="btn btn-default" style="width: 64px; height: 22px;">Add URL</button>
-							</td>
-						</tr>
-						<tr>
-							<td><span>Stream Key</span>
-							</td>
-							<td colspan=2 style="width: 90%;">
-								<input type="text" id="streamKey" value="tokaisodachi" placeholder="" style="width: 100%;">
-							</td>
-
-						</tr>
-					</table>
-					<hr>
-					<table>
-						<tr>
-							<td style="width: 66px;">
-								<img src="assets/arrow.svg" style="width: 32px">
-							</td>
-							<td id="addStream04">
-								<input id="pushStream" type="text" value="" placeholder="Stream URL / Key" style="width: 100%;">
-							</td>
-						</tr>
-						<tr>
-							<td>
-							</td>
-							<td>
-								<button id="addStream04btn" class="btn btn-default  pull-right" style="width: 64px; height: 22px;">Add</button>
-							</td>
-						</tr>
-					</table>
-					<span id="addArea"></span>
-					<br>
-					<br>
-					<br>
-				</div>
-
-
-				<div class="main-border tab5html" app-name="live5" style="display: none;">
-					<table>
-						<tr>
-							<td style="width: 66px;">
-								<span>Stream URL</span>
-							</td>
-							<td style="width: 100%;">
-								<input id="streamUrl" type="text" value="rtmp://localhost/live5/" placeholder="" style="width: 100%;">
-							</td>
-							<td>
-								<button id="addUrl" class="btn btn-default" style="width: 64px; height: 22px;">Add URL</button>
-							</td>
-						</tr>
-						<tr>
-							<td><span>Stream Key</span>
-							</td>
-							<td colspan=2 style="width: 90%;">
-								<input type="text" id="streamKey" value="tokaisodachi" placeholder="" style="width: 100%;">
-							</td>
-
-						</tr>
-					</table>
-					<hr>
-					<table>
-						<tr>
-							<td style="width: 66px;">
-								<img src="assets/arrow.svg" style="width: 32px">
-							</td>
-							<td id="addStream05">
-								<input id="pushStream" type="text" value="" placeholder="Stream URL / Key" style="width: 100%;">
-							</td>
-						</tr>
-						<tr>
-							<td>
-							</td>
-							<td>
-								<button id="addStream05btn" class="btn btn-default  pull-right" style="width: 64px; height: 22px;">Add</button>
-							</td>
-						</tr>
-					</table>
-					<span id="addArea"></span>
-					<br>
-					<br>
-					<br>
-				</div>
-
-
+                <div class="main-border loghtml" style="display: none; width: 100%;">
+                    <textarea id="logTextArea" style="height: 90%; resize: none;"></textarea>
+                </div>
 			</div>
-
-
 		</div>
 	</div>
 	<footer class="toolbar toolbar-footer">
@@ -276,11 +126,11 @@
 
 			<div class="pull-right startStopBtn">
 				<button id="startBtn" class="btn btn-primary">
-      Start
-    </button>
+                    Start
+                </button>
 				<button id="stopBtn" class="btn btn-negative" style="display: none;">
-      Stop
-    </button>
+                    Stop
+                </button>
 			</div>
 		</div>
 	</footer>
