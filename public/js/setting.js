@@ -25,18 +25,23 @@ $('.btn').on('click', function() {
 });
 
 function settingBtnSelect(id){
+    
+    if(id == 'canselBtn') ipcRenderer.send('relaunch');
+    if(id == 'resetBtn') saveConfig({port: 1935, directEdit: false, task: []});
     if(id == 'saveBtn'){
-        
         let json = {
             port: $('#port').val(),
             directEdit: $('#directEdit').prop('checked'),
             task: task
         };
-        
-        storage.set('config.json', json, function (error) {
-            if (error) throw error;
-        });
-        
-        ipcRenderer.send('relaunch');
+        saveConfig(json);
     }
+}
+
+function saveConfig(json){
+    storage.set('config.json', json, function (error) {
+        if (error) throw error;
+    });
+        
+    ipcRenderer.send('relaunch');
 }
