@@ -1,39 +1,52 @@
 // メインプロセス
+console.log = function(t,i,c,m) {
+    let text;
+    if(m) text = '['+t+'] '+m;
+    else {
+        let d = new Date();
+        text = '['+d.getFullYear()+'/'+d.getMonth()+1+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'] '+t;
+    }
+    
+    mainWindow.webContents.send('console', text);
+}
 
-// アプリケーション作成用のモジュールを読み込み
-const { app, BrowserWindow, Menu, ipcMain } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, dialog, net } = require('electron');
 const electron = require('electron');
 const { NodeMediaServer } = require('node-media-server');
 
 const reportUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdn0O0E6c_ykV0kkguqiPlISwJT06yjH_U4pUx02iqb54tkeA/viewform?usp=pp_url&entry.566470570="+app.getName()+"&entry.870996473="+app.getVersion();
 
-ipcMain.on('serverStart', (event, arg) => {
-    serverStart(arg);
-})
+var nms;
+var mainWindow,setWindow;
+
+ipcMain.on('serverStart', (event, task, port) => {
+    serverStart(task, port);
+});
 
 ipcMain.on('serverStop', (event, arg) => {
     nms.stop();
-})
+});
 
 ipcMain.on('getPlatform', (event, arg) => {
     event.sender.send('receivePlatform', process.platform);
-})
+});
 
 ipcMain.on('relaunch', (event, arg) => {
     app.exit();
     app.relaunch();
-})
+});
 
-//console.log(app.getPath('userData'));
-console.log(__dirname);
-var nms;
+app.on('ready', createWindow);
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+});
 
+app.on('activate', () => {
+    if (mainWindow === null) createWindow();
+});
 
-// メインウィンドウ
-let mainWindow,setWindow;
 
 function createWindow() {
-	// メインウィンドウを作成します
     
 	mainWindow = new BrowserWindow({
 		width: 500,
@@ -52,12 +65,9 @@ function createWindow() {
 	});
     
     mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
+        mainWindow.show();
+        console.log('mainWindows.show');
     })
-}
-
-function onExit() {
-	app.quit();
 }
 
 function settingWindow() {
@@ -71,7 +81,6 @@ function settingWindow() {
 	});
     
     setWindow.loadFile('public/setting.html');
-    
 //    setWindow.webContents.openDevTools();
     
     setWindow.on('closed', () => {
@@ -81,8 +90,11 @@ function settingWindow() {
     setWindow.once('ready-to-show', () => {
         setWindow.show()
         mainWindow.hide();
-    })
-    
+    })    
+}
+
+function onExit() {
+	app.quit();
 }
 
 function initMenu(){
@@ -119,6 +131,11 @@ function initMenu(){
             label: 'ヘルプ',
             role: 'help',
             submenu: [{
+                    label: '更新をチェックする',
+                    click: updateCheck
+                },{
+                type: 'separator'
+                },{
                     label: '問題の報告...',
                     click() {
                         electron.shell.openExternal(reportUrl);
@@ -156,6 +173,11 @@ function initMenu(){
             label: 'ヘルプ',
             role: 'help',
             submenu: [{
+                    label: '更新をチェックする',
+                    click: updateCheck
+                },{
+                type: 'separator'
+                },{
                     label: '問題の報告...',
                     click() {
                         electron.shell.openExternal(reportUrl);
@@ -175,32 +197,20 @@ function initMenu(){
                 }]
             }
         ]
-
     }
 
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
 }
 
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
-});
-
-app.on('activate', () => {
-    if (mainWindow === null) createWindow();
-});
-
-
-
-function serverStart(task){ 
+function serverStart(task, port){ 
+    
     if (process.platform !== 'darwin') var fileName = 'ffmpeg.exe';
     else var fileName = 'ffmpeg';
 
     var config = {
         rtmp: {
-            port: 1935,
+            port: parseInt(port),
             chunk_size: 60000,
             gop_cache: true,
             ping: 60,
@@ -213,8 +223,47 @@ function serverStart(task){
     };
     
     nms = new NodeMediaServer(config)
-    
     nms.run();
-    
 }
 
+function updateCheck(){
+    console.log('updateCheck.start');
+
+    const request = net.request('https://api.github.com/repos/tokjin/RtmpRelayer/releases/latest')
+    request.on('response', (response) => {
+        let body = '';
+        response.on('data', (chunk) => {
+            body += chunk;
+        })
+        response.on('end', () => {
+            console.log('updateCheck.end');
+            let gitJson = JSON.parse(body);
+            let latestVer = gitJson.tag_name;
+            let currentVer = 'v'+app.getVersion();
+            
+            if(latestVer == currentVer){
+                var options = {
+                    type: 'info',
+                    title: 'there are no updates.',
+                    message: "お使いのバージョンは最新のものです。\n("+currentVer+")",
+                    buttons: ['完了']
+                }
+                dialog.showMessageBox(options);
+                
+            } else {
+                var options = {
+                    type: 'info',
+                    title: 'a new update is now available.',
+                    message: "新しいバージョンが見つかりました。\n\nダウンロードページを開きますか？\n("+currentVer+" → "+latestVer+")",
+                    buttons: ['Yes', 'No']
+                }
+                dialog.showMessageBox(options, function(i) {
+                    console.log('dialog.button: '+i);
+                    if(!i) electron.shell.openExternal('https://github.com/tokjin/RtmpRelayer/releases/latest');
+                })
+            }
+        })
+    })
+    
+    request.end()
+}
