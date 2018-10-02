@@ -148,7 +148,10 @@ function serverStart() {
 
             for(var j=0;j<streamCnt;j++){
                 let edge = $('div.'+tabName+' #pushStream').eq(j).val();
-                if (edge) task.push({app: appName, mode: 'push', edge: edge, name: name});
+                if (edge) {
+                    rendererlogAppend('appName:'+appName+' edge:'+edge+' name:'+name);
+                    task.push({app: appName, mode: 'push', edge: edge});
+                }
             }
         }
     }
@@ -176,6 +179,13 @@ function configInit() {
     storage.set('config.json', json, function (error) {
         if (error) throw error;
     });
+}
+
+function rendererlogAppend(text){
+    let d = new Date();
+    let month = parseInt(d.getMonth())+1;
+    text = '['+d.getFullYear()+'/'+month+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'] '+text;
+    logAppend(text);
 }
 
 function logAppend(text){

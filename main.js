@@ -1,13 +1,19 @@
 // メインプロセス
-console.log = function(t,i,c,m) {
-    let text;
-    if(m) text = '['+t+'] '+m;
-    else {
+
+console.log = function() {
+    let logText='';
+    if(arguments.length == 1) {
         let d = new Date();
-        text = '['+d.getFullYear()+'/'+d.getMonth()+1+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'] '+t;
+        let month = parseInt(d.getMonth())+1;
+        logText = '[]'+d.getFullYear()+'/'+month+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'] '+arguments[0];
+    } else {
+        logText += '['+arguments[0]+'] '
+        for(var i = 1; i < arguments.length; ++i){
+            if(i!=2) logText += arguments[i]+' ';
+        }
     }
-    
-    mainWindow.webContents.send('console', text);
+
+    mainWindow.webContents.send('console', logText);
 }
 
 const { app, BrowserWindow, Menu, ipcMain, dialog, net } = require('electron');
@@ -213,8 +219,13 @@ function serverStart(task, port){
             port: parseInt(port),
             chunk_size: 60000,
             gop_cache: true,
-            ping: 60,
-            ping_timeout: 30
+            ping: 30,
+            ping_timeout: 15
+        },
+        http: {
+            port: 8000,
+            mediaroot: './media',
+            allow_origin: '*'
         },
         relay: {
             ffmpeg: __dirname+'/ffmpeg/'+fileName,
