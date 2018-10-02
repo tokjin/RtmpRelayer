@@ -11,8 +11,11 @@
     "electron": "^3.0.2",
     "electron-json-storage": "^4.1.2",
     "jquery": "^3.3.1",
-    "node-media-server": "^1.4.3"
-  },
+  },{
+    "devDependencies": {
+        "node-media-server": "tokjin/Node-Media-Server"
+    }
+}
   "devDependencies": {},
   "description": ""
 }
