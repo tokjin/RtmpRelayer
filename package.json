@@ -1,6 +1,6 @@
 {
   "name": "rtmp.relayer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,11 +11,16 @@
     "electron": "^3.0.2",
     "electron-json-storage": "^4.1.2",
     "jquery": "^3.3.1",
-  },{
-    "devDependencies": {
-        "node-media-server": "tokjin/Node-Media-Server"
-    }
-}
+    "node-media-server": "^1.4.3"
+  },
   "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tokjin/RtmpRelayer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tokjin/RtmpRelayer/issues"
+  },
+  "homepage": "https://github.com/tokjin/RtmpRelayer#readme",
   "description": ""
 }
