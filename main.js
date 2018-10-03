@@ -5,7 +5,7 @@ console.log = function() {
     if(arguments.length == 1) {
         let d = new Date();
         let month = parseInt(d.getMonth())+1;
-        logText = '[]'+d.getFullYear()+'/'+month+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'] '+arguments[0];
+        logText = '['+d.getFullYear()+'/'+month+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'] '+arguments[0];
     } else {
         logText += '['+arguments[0]+'] '
         for(var i = 1; i < arguments.length; ++i){
@@ -53,7 +53,7 @@ app.on('activate', () => {
 
 
 function createWindow() {
-    
+
 	mainWindow = new BrowserWindow({
 		width: 500,
 		height: 350,
@@ -72,7 +72,7 @@ function createWindow() {
     
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
-        console.log('mainWindows.show');
+        console.log(app.getName()+' '+app.getVersion()+'('+process.platform+')');
     })
 }
 
@@ -209,32 +209,29 @@ function initMenu(){
     Menu.setApplicationMenu(menu);
 }
 
-function serverStart(task, port){ 
+function serverStart(json){ 
     
     if (process.platform !== 'darwin') var fileName = 'ffmpeg.exe';
     else var fileName = 'ffmpeg';
 
     var config = {
         rtmp: {
-            port: parseInt(port),
-            chunk_size: 60000,
-            gop_cache: true,
-            ping: 30,
-            ping_timeout: 15
-        },
-        http: {
-            port: 8000,
-            mediaroot: './media',
-            allow_origin: '*'
+            port: parseInt(json.port),
+            chunk_size: parseInt(json.chunk_size),
+            gop_cache: json.gop_cache,
+            ping: parseInt(json.ping),
+            ping_timeout: parseInt(json.ping_timeout)
         },
         relay: {
             ffmpeg: __dirname+'/ffmpeg/'+fileName,
-            tasks: task
+            tasks: json.task
         }
     };
+    console.log('Config File:'+JSON.stringify(config));
     
     nms = new NodeMediaServer(config)
     nms.run();
+    
 }
 
 function updateCheck(){

@@ -24,26 +24,56 @@
 
 					<table>
 						<tr>
-							<td style="width: 66px;">
-
+							<td style="width: 150px;">
 								<span>RTMP Server Port:</span>
 							</td>
-							<td style="width: 100%;">
-
+							<td style="width: 70%;">
 								<input id="port" type="number" value="1935" placeholder="Default: 1935" style="width: 100%;">
-
 							</td>
 						</tr>
-
+						<tr>
+							<td>
+								<span>Chunk Size:</span>
+							</td>
+							<td>
+								<input id="chunkSize" type="number" value="60000" placeholder="Default: 60000" style="width: 100%;">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span>Ping:</span>
+							</td>
+							<td>
+								<input id="ping" type="number" value="60" placeholder="Default: 60" style="width: 100%;">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span>Ping Timeout:</span>
+							</td>
+							<td>
+								<input id="pingTimeout" type="number" value="30" placeholder="Default: 30" style="width: 100%;">
+							</td>
+						</tr>
+						<tr>
+                            <td colspan="2">
+								<hr>
+							</td>
+						</tr>
 						<tr>
                             <td>
-								<input type="checkbox" id="directEdit" value="1"> Direct Edit Mode
-
+								<input type="checkbox" id="gopCache" value="1">
+                                GOP Cache
+							</td>
+						</tr>
+						<tr>
+                            <td>
+								<input type="checkbox" id="directEdit" value="1">
+                                Direct Edit Mode
 							</td>
 						</tr>
 
 					</table>
-
 				</div>
 			</div>
 

@@ -12,21 +12,31 @@ ipcRenderer.on('console', (event, arg) => {
     logAppend(arg);
 });
 
-var currentPort = 1935;
+var currentPort = 1935,
+    directEdit,chunk_size,gop_cache,ping,ping_timeout;
 
 storage.get('config.json', function (error, data) {
     if (error) throw error;
 
-    if (Object.keys(data).length === 0) configInit();
-    else if(data.directEdit) {
-        
+    chunk_size = data.chunk_size;
+    gop_cache = data.gop_cache;
+    ping = data.ping;
+    ping_timeout = data.ping_timeout;
+    directEdit = data.directEdit;
+    
+    if (Object.keys(data).length === 0) configInit(); // 初回起動時
+    else if(!data.chunk_size) { // v1.1.1未満のconfigを修復
+        var json = { port: data.port, chunk_size: 60000, gop_cache: true, ping: 60, ping_timeout: 30, directEdit: data.directEdit, task: data.task };
+        storage.set('config.json', json, function (error) {
+            if (error) throw error;
+            rendererlogAppend('config repair');
+            ipcRenderer.send('relaunch');
+        });
+    } else if(data.directEdit) {
         $('.tab-group').html('');
         $('.pane-group').html('<textarea id="directEditer">'+JSON.stringify(data.task)+'</textarea>');
-        
     } else {
         // データがあるときの処理
-        console.log(data);
-        
         if(data.port != currentPort) {
             currentPort = data.port;
             
@@ -158,7 +168,11 @@ function serverStart() {
     
     var json = {
         port: currentPort,
-        directEdit: false,
+        chunk_size: chunk_size,
+        gop_cache: gop_cache,
+        ping: ping,
+        ping_timeout: ping_timeout,
+        directEdit: directEdit,
         task: task
     };
     
@@ -166,18 +180,23 @@ function serverStart() {
         if (error) throw error;
     });
     
-    ipcRenderer.send('serverStart', task, json.port);
+    ipcRenderer.send('serverStart', json);
 }
 
 function configInit() {
     var json = {
         port: 1935,
+        chunk_size: 60000,
+        gop_cache: true,
+        ping: 60,
+        ping_timeout: 30,
         directEdit: false,
         task: []
     };
     
     storage.set('config.json', json, function (error) {
         if (error) throw error;
+        rendererlogAppend('config initialization');
     });
 }
 
