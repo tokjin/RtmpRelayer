@@ -235,7 +235,7 @@ function serverStart(json){
 }
 
 function updateCheck(){
-    console.log('updateCheck.start');
+    console.log('updateCheck');
 
     const request = net.request('https://api.github.com/repos/tokjin/RtmpRelayer/releases/latest')
     request.on('response', (response) => {
@@ -244,10 +244,10 @@ function updateCheck(){
             body += chunk;
         })
         response.on('end', () => {
-            console.log('updateCheck.end');
             let gitJson = JSON.parse(body);
             let latestVer = gitJson.tag_name;
             let currentVer = 'v'+app.getVersion();
+            console.log('current:'+currentVer+' / latest:'+latestVer);
             
             if(latestVer == currentVer){
                 var options = {
@@ -266,7 +266,6 @@ function updateCheck(){
                     buttons: ['Yes', 'No']
                 }
                 dialog.showMessageBox(options, function(i) {
-                    console.log('dialog.button: '+i);
                     if(!i) electron.shell.openExternal('https://github.com/tokjin/RtmpRelayer/releases/latest');
                 })
             }
