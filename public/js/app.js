@@ -125,6 +125,11 @@ function buttonSelect(id){
         $('#'+id.slice(0,-3)).append('<br><input id="pushStream" type="text" value="" placeholder="Stream URL / Key" style="width: 100%;">');
     }
     
+    if (id == "refreshBtn"){
+        saveConfig();
+        ipcRenderer.send('relaunch');
+    }
+        
     if (id == "startBtn"){
         serverStart();
         $('#startBtn').css('display','none');
@@ -141,7 +146,7 @@ function buttonSelect(id){
     }
 }
 
-function serverStart() {
+function saveConfig() {
     
     let task = [];
     
@@ -150,7 +155,7 @@ function serverStart() {
         console.log(task);
         
     } else {
-        for(var i=1;i<6;i++) {
+        for(var i=1;i<3;i++) {
             let tabName = "tab"+i+"html";
             let appName = $('div.'+tabName).attr('app-name');
             let name = $('div.'+tabName+' #streamKey').val();
@@ -180,7 +185,11 @@ function serverStart() {
         if (error) throw error;
     });
     
-    ipcRenderer.send('serverStart', json);
+    return json;
+}
+
+function serverStart(){
+    ipcRenderer.send('serverStart', saveConfig());
 }
 
 function configInit() {
