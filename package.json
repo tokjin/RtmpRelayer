@@ -10,7 +10,7 @@
   "dependencies": {
     "electron": "^3.0.2",
     "electron-json-storage": "^4.1.2",
-    "jquery": "^3.3.1",
+    "jquery": ">=3.4.0",
     "node-media-server": "git+https://github.com/tokjin/Node-Media-Server.git"
   },
   "devDependencies": {},
