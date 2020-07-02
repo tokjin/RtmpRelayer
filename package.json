@@ -1,26 +1,26 @@
 {
-  "name": "rtmp.relayer",
-  "version": "1.1.1",
+  "name": "rtmprelayer",
+  "version": "1.1.2",
+  "description": "This software builds its own private RTMP server.\r And you can mirror the received video.",
   "main": "main.js",
+  "dependencies": {
+    "electron": "^3.1.13",
+    "electron-json-storage": "^4.1.8",
+    "jquery": "^3.5.1",
+    "node-media-server": "^1.4.3"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jin Tokaisodachi <jin@tokaisodachi.com> (https://tokaisodachi.com/)",
-  "license": "GPL-3.0",
-  "dependencies": {
-    "electron": "^3.0.2",
-    "electron-json-storage": "^4.1.2",
-    "jquery": ">=3.4.0",
-    "node-media-server": "git+https://github.com/tokjin/Node-Media-Server.git"
-  },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tokjin/RtmpRelayer.git"
   },
+  "author": "",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/tokjin/RtmpRelayer/issues"
   },
-  "homepage": "https://github.com/tokjin/RtmpRelayer#readme",
-  "description": ""
+  "homepage": "https://github.com/tokjin/RtmpRelayer#readme"
 }

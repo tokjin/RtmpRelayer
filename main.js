@@ -60,11 +60,14 @@ function createWindow() {
 		titleBarStyle: 'hidden',
 		acceptFirstMouse: true,
         show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
 	});
     
 	mainWindow.loadFile('public/index.html');
     initMenu();
-//	mainWindow.webContents.openDevTools(); // デベロッパーツールの起動
+	//mainWindow.webContents.openDevTools(); // デベロッパーツールの起動
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
@@ -84,6 +87,9 @@ function settingWindow() {
 		titleBarStyle: 'hidden',
 		acceptFirstMouse: true,
         show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
 	});
     
     setWindow.loadFile('public/setting.html');

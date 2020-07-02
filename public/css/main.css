@@ -28,6 +28,7 @@ a {
     width: 200px;
 }
 .main-border {
+    width: 100%;
     text-align: left;
     padding: 20px;
     margin: 20px;
