@@ -4,7 +4,7 @@
   "description": "This software builds its own private RTMP server.\r And you can mirror the received video.",
   "main": "main.js",
   "dependencies": {
-    "electron": "^3.1.13",
+    "electron": "^9.1.0",
     "electron-json-storage": "^4.1.8",
     "jquery": "^3.5.1",
     "node-media-server": "^1.4.3"
